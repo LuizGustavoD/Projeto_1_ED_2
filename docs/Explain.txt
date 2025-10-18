@@ -1,0 +1,20 @@
+PROJETO 1 
+Estrutura de Dados 2
+Aluno: Luiz Gustavo Dacome Damas Noturno
+Professor: Emilio Bergamim Júnior 
+
+Olá professor, elaborei esse arquivo para explicar a lógica de modularização e implementação pensada.
+De começo, tenho familiaridade com desenvolvimento WEB, então adaptei a estruturação do projeto para algo semelhante.
+
+ESTRUTURA:
+/app -> Operações responsáveis da aplicação segregadas em arquivos para cada função.
+
+/data -> Arquivos .bin que são responsáveis pelo controle do nosso "Banco de Dados" um deles sendo o arquivo de Key com os OffSets para o arquivo de dados propriamente dito.
+
+/docs -> Documentação e explicação da lógica + estrutura do projeto.
+
+/models -> Estruturas utilizadas durante a lógica do projeto
+
+main.c -> Centro de execução da nossa "Aplicação"
+
+Extra: Antes de cada função mais relevante, comentei uma síntese do que a mesma faz para fim de maior visibilidade e entendimento.
