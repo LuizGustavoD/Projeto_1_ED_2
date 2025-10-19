@@ -449,7 +449,7 @@ void recreate_index_with_names(const char *data_file_name, const char *index_fil
     fseek(data_file, 0, SEEK_SET);
     
     int image_count = 0;
-    printf("📋 Recriando índices preservando nomes...\n");
+    printf("Recriando índices preservando nomes...\n");
     
     while(ftell(data_file) < file_size) {
         long current_offset = ftell(data_file);
@@ -520,10 +520,10 @@ void recreate_index_with_names(const char *data_file_name, const char *index_fil
     
 end_recreation_with_names:
     fclose(data_file);
-    printf("✅ Índices recriados preservando nomes! Total: %d imagens\n", image_count);
-    printf("📋 Nova imagem '%s' inserida no início\n", new_image_name);
+    printf("Índices recriados preservando nomes! Total: %d imagens\n", image_count);
+    printf("Nova imagem '%s' inserida no início\n", new_image_name);
     if (existing_count > 0) {
-        printf("📋 %d nomes originais preservados\n", existing_count);
+        printf(" %d nomes originais preservados\n", existing_count);
     }
 }
 
@@ -531,7 +531,7 @@ end_recreation_with_names:
 void recreate_index_after_compression(const char *data_file_name, const char *index_file_name) {
     FILE *data_file = fopen(data_file_name, "rb");
     if (!data_file) {
-        printf("❌ Erro ao abrir arquivo de dados!\n");
+        printf("Erro ao abrir arquivo de dados!\n");
         return;
     }
     
@@ -544,7 +544,7 @@ void recreate_index_after_compression(const char *data_file_name, const char *in
     fseek(data_file, 0, SEEK_SET);
     
     int image_count = 0;
-    printf("📋 Recriando índices após compactação...\n");
+    printf("Recriando índices após compactação...\n");
     
     while(ftell(data_file) < file_size) {
         long current_offset = ftell(data_file);
@@ -605,7 +605,7 @@ void recreate_index_after_compression(const char *data_file_name, const char *in
     
 end_recreation_compression:
     fclose(data_file);
-    printf("✅ Índices recriados após compactação! Total de imagens ativas: %d\n", image_count);
+    printf(" Índices recriados após compactação! Total de imagens ativas: %d\n", image_count);
 }
 
 

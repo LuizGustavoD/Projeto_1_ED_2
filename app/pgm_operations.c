@@ -64,11 +64,11 @@ void RLE_compress(PGM *img, const char *bin_file_name){
 void RLE_compress_v2(PGM *img, const char *bin_file_name, long *offset){
     // Se a imagem não é binária (tem tons de cinza), salvar em formato RAW
     if (!is_binary_image(img)) {
-        printf("⚠️  Imagem não é binária, salvando em formato RAW\n");
+        printf("  Imagem não é binária, salvando em formato RAW\n");
         save_raw_v2(img, bin_file_name, offset);
         return;
     }
-    printf("✅ Imagem é binária, aplicando compressão RLE!\n");
+    printf(" Imagem é binária, aplicando compressão RLE!\n");
     
     FILE *bin_file = fopen(bin_file_name, "ab");
     if (!bin_file) {
@@ -154,7 +154,7 @@ void RLE_compress_v2(PGM *img, const char *bin_file_name, long *offset){
 void  read_compress_image(const char *bin_file_name, PGM *img, long *offset){
     FILE *bin_file = fopen(bin_file_name, "rb");
     if (!bin_file){
-        printf("❌ Erro ao abrir arquivo binário para leitura.\n");
+        printf("Erro ao abrir arquivo binário para leitura.\n");
         return;
     }
     
@@ -163,13 +163,13 @@ void  read_compress_image(const char *bin_file_name, PGM *img, long *offset){
     long file_size = ftell(bin_file);
     
     if (file_size == 0) {
-        printf("❌ Arquivo de dados está vazio!\n");
+        printf("Arquivo de dados está vazio!\n");
         fclose(bin_file);
         return;
     }
     
     if (*offset >= file_size) {
-        printf("❌ Offset inválido! Offset: %ld, Tamanho do arquivo: %ld\n", *offset, file_size);
+        printf("Offset inválido! Offset: %ld, Tamanho do arquivo: %ld\n", *offset, file_size);
         fclose(bin_file);
         return;
     }
@@ -179,28 +179,28 @@ void  read_compress_image(const char *bin_file_name, PGM *img, long *offset){
     // Ler dimensões e grey_levels (pode ser negativo = RLE, ou positivo = RAW)
     if (fread(&img->width, sizeof(int), 1, bin_file) != 1 ||
         fread(&img->height, sizeof(int), 1, bin_file) != 1) {
-        printf("❌ Erro ao ler dimensões da imagem!\n");
+        printf("Erro ao ler dimensões da imagem!\n");
         fclose(bin_file);
         return;
     }
     
     int stored_grey;
     if (fread(&stored_grey, sizeof(int), 1, bin_file) != 1) {
-        printf("❌ Erro ao ler níveis de cinza!\n");
+        printf("Erro ao ler níveis de cinza!\n");
         fclose(bin_file);
         return;
     }
     
     // Validar dimensões
     if (img->width <= 0 || img->height <= 0 || img->width > 10000 || img->height > 10000) {
-        printf("❌ Dimensões inválidas: %dx%d\n", img->width, img->height);
+        printf("Dimensões inválidas: %dx%d\n", img->width, img->height);
         fclose(bin_file);
         return;
     }
     
     img->pixels = malloc(img->height * sizeof(unsigned char *));
     if (!img->pixels) {
-        printf("❌ Erro ao alocar memória para imagem!\n");
+        printf("Erro ao alocar memória para imagem!\n");
         fclose(bin_file);
         return;
     }
@@ -208,7 +208,7 @@ void  read_compress_image(const char *bin_file_name, PGM *img, long *offset){
     for (int i = 0; i < img->height; i++) {
         img->pixels[i] = malloc(img->width * sizeof(unsigned char));
         if (!img->pixels[i]) {
-            printf("❌ Erro ao alocar memória para linha %d!\n", i);
+            printf("Erro ao alocar memória para linha %d!\n", i);
             // Liberar memória já alocada
             for (int j = 0; j < i; j++) {
                 free(img->pixels[j]);
@@ -308,6 +308,6 @@ void save_raw_v2(PGM *img, const char *bin_file_name, long *offset) {
     }
     
     fclose(bin_file);
-    printf("💾 Imagem salva em formato RAW (escala de cinza preservada)\n");
+    printf("Imagem salva em formato RAW (escala de cinza preservada)\n");
 }
              

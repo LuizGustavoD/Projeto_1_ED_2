@@ -46,7 +46,7 @@ void opcao_carregar_imagem() {
     printf("Digite o nome da imagem para buscar: ");
     
     if (fgets(nome_busca, sizeof(nome_busca), stdin) == NULL) {
-        printf("ERRO: Erro ao ler entrada!\n");
+        printf("❌ Erro ao ler entrada!\n");
         pausar();
         return;
     }
@@ -136,12 +136,12 @@ void opcao_carregar_imagem() {
                     reg.is_removed = 0;
                     adicionar_indice(idx, reg);
                     fclose(idx);
-                    printf("✅ Imagem negativada salva como: %s\n", reg.name);
+                    printf(" Imagem negativada salva como: %s\n", reg.name);
                 } else {
-                    printf("❌ Erro ao abrir arquivo de índices!\n");
+                    printf(" Erro ao abrir arquivo de índices!\n");
                 }
             } else {
-                printf("⚠️  Negativação aplicada apenas na memória (não salva no banco)\n");
+                printf("Negativação aplicada apenas na memória (não salva no banco)\n");
             }
             break;
         }
@@ -151,7 +151,7 @@ void opcao_carregar_imagem() {
             printf("Digite o valor do limiar (0-%d): ", imagem_atual->grey_levels);
             scanf("%d", &limiar);
             limiarizar(imagem_atual, limiar);
-            printf("✅ Limiarização aplicada (L=%d)!\n", limiar);
+            printf(" Limiarização aplicada (L=%d)!\n", limiar);
             
             // Informar sobre compactação RLE antes do input
             printf("\n>> Esta versão será automaticamente compactada pelo algoritmo RLE (Run-Length Encoding)\n");
@@ -178,7 +178,7 @@ void opcao_carregar_imagem() {
                 reg.offset = rle_offset;
                 adicionar_indice(idx, reg); // Função modular
                 fclose(idx);
-                printf("✅ Imagem limiarizada salva com RLE como: %s\n", reg.name);
+                printf(" Imagem limiarizada salva com RLE como: %s\n", reg.name);
             }
             break;
         }
@@ -188,7 +188,7 @@ void opcao_carregar_imagem() {
             printf("Digite o nome do arquivo PGM de saída: ");
             scanf("%255s", caminho);
             save_pgm(caminho, imagem_atual);
-            printf("✅ Imagem salva em '%s'\n", caminho);
+            printf(" Imagem salva em '%s'\n", caminho);
             break;
         }
         
@@ -197,7 +197,7 @@ void opcao_carregar_imagem() {
             break;
             
         default:
-            printf("❌ Opção inválida!\n");
+            printf(" Opção inválida!\n");
     }
     
     pausar();
@@ -216,7 +216,7 @@ void opcao_limiarizacao_e_salvar() {
             caminho[len-1] = '\0';
         }
     } else {
-        printf("❌ Erro ao ler caminho do arquivo!\n");
+        printf(" Erro ao ler caminho do arquivo!\n");
         pausar();
         return;
     }
@@ -229,7 +229,7 @@ void opcao_limiarizacao_e_salvar() {
         return;
     }
     
-    printf("✅ Imagem carregada: %dx%d, Níveis: %d\n", 
+    printf(" Imagem carregada: %dx%d, Níveis: %d\n", 
            nova_imagem->width, nova_imagem->height, nova_imagem->grey_levels);
     
     // Perguntar posição no banco
@@ -256,17 +256,17 @@ void opcao_limiarizacao_e_salvar() {
         // Verificar se o nome não está vazio
         if (strlen(nome_indice) == 0) {
             strcpy(nome_indice, "imagem_sem_nome");
-            printf("⚠️  Nome vazio detectado, usando: '%s'\n", nome_indice);
+            printf(" Nome vazio detectado, usando: '%s'\n", nome_indice);
         }
     } else {
         strcpy(nome_indice, "imagem_sem_nome");
-        printf("⚠️  Erro ao ler nome, usando: '%s'\n", nome_indice);
+        printf(" Erro ao ler nome, usando: '%s'\n", nome_indice);
     }
     
     append_image_to_data_file(data_file, nova_imagem, posicao, nome_indice);
     
-    printf("✅ Imagem '%s' salva no banco!\n", nome_indice);
-    printf("📍 Posição: %s\n", (posicao == 0) ? "Final" : "Início");
+    printf("Imagem '%s' salva no banco!\n", nome_indice);
+    printf("Posição: %s\n", (posicao == 0) ? "Final" : "Início");
     
     free_image(nova_imagem);
     pausar();
@@ -284,14 +284,14 @@ void opcao_negativo() {
             nome_busca[len-1] = '\0';
         }
     } else {
-        printf("❌ Erro ao ler nome da imagem!\n");
+        printf("Erro ao ler nome da imagem!\n");
         pausar();
         return;
     }
     
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Arquivo de índices não encontrado!\n");
+        printf("Arquivo de índices não encontrado!\n");
         pausar();
         return;
     }
@@ -300,14 +300,14 @@ void opcao_negativo() {
     fclose(index);
     
     if (offset == -1) {
-        printf("❌ Imagem '%s' não encontrada no banco!\n", nome_busca);
+        printf("Imagem '%s' não encontrada no banco!\n", nome_busca);
         pausar();
         return;
     }
     
     // Confirmar deleção
     char confirmacao;
-    printf("⚠️  Confirma a deleção da imagem '%s'? (s/n): ", nome_busca);
+    printf("Confirma a deleção da imagem '%s'? (s/n): ", nome_busca);
     scanf(" %c", &confirmacao);
     
     if (confirmacao == 's' || confirmacao == 'S') {
@@ -315,13 +315,13 @@ void opcao_negativo() {
         if (data) {
             remove_flag_control(data, offset); // Função modular
             fclose(data);
-            printf("✅ Imagem '%s' marcada para deleção!\n", nome_busca);
-            printf("💡 Use a opção 4 para comprimir e remover definitivamente.\n");
+            printf("Imagem '%s' marcada para deleção!\n", nome_busca);
+            printf("Use a opção 4 para comprimir e remover definitivamente.\n");
         } else {
-            printf("❌ Erro ao acessar banco de dados!\n");
+            printf("Erro ao acessar banco de dados!\n");
         }
     } else {
-        printf("❌ Deleção cancelada.\n");
+        printf("Deleção cancelada.\n");
     }
     
     pausar();
@@ -340,7 +340,7 @@ void opcao_buscar_imagem() {
     
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Arquivo de índices não encontrado!\n");
+        printf("Arquivo de índices não encontrado!\n");
         pausar();
         return;
     }
@@ -349,7 +349,7 @@ void opcao_buscar_imagem() {
     fclose(index);
     
     if (offset == -1) {
-        printf("❌ Imagem '%s' não encontrada!\n", identificador);
+        printf("Imagem '%s' não encontrada!\n", identificador);
         pausar();
         return;
     }
@@ -363,7 +363,7 @@ void opcao_buscar_imagem() {
     imagem_atual = malloc(sizeof(PGM));
     read_compress_image(data_file, imagem_atual, &offset);
     
-    printf("✅ Imagem '%s' carregada!\n", identificador);
+    printf("Imagem '%s' carregada!\n", identificador);
     printf("Dimensões: %dx%d\n", imagem_atual->width, imagem_atual->height);
     pausar();
 }
@@ -381,7 +381,7 @@ void opcao_remover_imagem() {
     
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Arquivo de índices não encontrado!\n");
+        printf("Arquivo de índices não encontrado!\n");
         pausar();
         return;
     }
@@ -390,7 +390,7 @@ void opcao_remover_imagem() {
     fclose(index);
     
     if (offset == -1) {
-        printf("❌ Imagem não encontrada!\n");
+        printf("Imagem não encontrada!\n");
         pausar();
         return;
     }
@@ -399,9 +399,9 @@ void opcao_remover_imagem() {
     if (data) {
         remove_flag_control(data, offset);
         fclose(data);
-        printf("✅ Imagem '%s' marcada como removida\n", identificador);
+        printf("Imagem '%s' marcada como removida\n", identificador);
     } else {
-        printf("❌ Erro ao acessar arquivo de dados!\n");
+        printf("Erro ao acessar arquivo de dados!\n");
     }
     pausar();
 }
@@ -419,7 +419,7 @@ void opcao_restaurar_imagem() {
     
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Arquivo de índices não encontrado!\n");
+        printf("Arquivo de índices não encontrado!\n");
         pausar();
         return;
     }
@@ -428,7 +428,7 @@ void opcao_restaurar_imagem() {
     fclose(index);
     
     if (offset == -1) {
-        printf("❌ Imagem não encontrada!\n");
+        printf("Imagem não encontrada!\n");
         pausar();
         return;
     }
@@ -437,16 +437,16 @@ void opcao_restaurar_imagem() {
     if (data) {
         restore_flag_control(data, offset);
         fclose(data);
-        printf("✅ Imagem '%s' restaurada\n", identificador);
+        printf("Imagem '%s' restaurada\n", identificador);
     } else {
-        printf("❌ Erro ao acessar arquivo de dados!\n");
+        printf("Erro ao acessar arquivo de dados!\n");
     }
     pausar();
 }
 
 // Compacta banco removendo imagens deletadas
 void opcao_compactar() {
-    printf("🔄 Iniciando compactação do banco de dados...\n");
+    printf("Iniciando compactação do banco de dados...\n");
     char temp_file[] = "data/temp.bin";
     
     // Usar função modular para compactar
@@ -456,8 +456,8 @@ void opcao_compactar() {
     remove(data_file);
     rename(temp_file, data_file);
     
-    printf("✅ Compactação concluída!\n");
-    printf("💾 Todas as imagens com flag de deleção foram removidas.\n");
+    printf("Compactação concluída!\n");
+    printf("Todas as imagens com flag de deleção foram removidas.\n");
     pausar();
 }
 
@@ -466,12 +466,12 @@ void opcao_sobre() {
     printf("===============================================\n");
     printf("        INFORMAÇÕES DO PROGRAMA               \n");
     printf("===============================================\n");
-    printf("📚 PROJETO 1 - ESTRUTURA DE DADOS 2\n");
-    printf("👨‍🎓 Aluno: Luiz Gustavo Dacome Damas\n");
-    printf("🏫 Turma: Noturno\n");
-    printf("👨‍🏫 Professor: Emilio Bergamim Júnior\n");
+    printf("PROJETO 1 - ESTRUTURA DE DADOS 2\n");
+    printf("Aluno: Luiz Gustavo Dacome Damas\n");
+    printf("Turma: Noturno\n");
+    printf("Professor: Emilio Bergamim Júnior\n");
     printf("\n");
-    printf("🎯 FUNCIONALIDADES:\n");
+    printf("FUNCIONALIDADES:\n");
     printf("• Banco de dados de imagens PGM\n");
     printf("• Compressão RLE (Run-Length Encoding)\n");
     printf("• Sistema de indexação por nome\n");
@@ -479,13 +479,13 @@ void opcao_sobre() {
     printf("• Gestão de dados com soft delete\n");
     printf("• Compactação automática do banco\n");
     printf("\n");
-    printf("🏗️  ARQUITETURA MODULAR:\n");
+    printf("ARQUITETURA MODULAR:\n");
     printf("• /app - Operações da aplicação\n");
     printf("• /models - Estruturas de dados\n");
     printf("• /data - Banco de dados binário\n");
     printf("• /docs - Documentação\n");
     printf("\n");
-    printf("⚡ TECNOLOGIAS:\n");
+    printf("TECNOLOGIAS:\n");
     printf("• Linguagem C\n");
     printf("• Estruturas de dados dinâmicas\n");
     printf("• Manipulação de arquivos binários\n");
@@ -506,13 +506,13 @@ void opcao_exportar_pgm() {
     scanf("%255s", caminho);
     
     save_pgm(caminho, imagem_atual);
-    printf("✅ Imagem exportada para '%s'\n", caminho);
+    printf("Imagem exportada para '%s'\n", caminho);
     pausar();
 }
 
 void opcao_salvar_binario() {
     if (imagem_atual == NULL) {
-        printf("❌ Nenhuma imagem carregada!\n");
+        printf("Nenhuma imagem carregada!\n");
         pausar();
         return;
     }
@@ -525,9 +525,9 @@ void opcao_salvar_binario() {
     if (arq) {
         int offset = salvar_imagem_binario(arq, imagem_atual);
         fclose(arq);
-        printf("✅ Imagem salva em binário (offset: %d)\n", offset);
+        printf("Imagem salva em binário (offset: %d)\n", offset);
     } else {
-        printf("❌ Erro ao criar arquivo!\n");
+        printf("Erro ao criar arquivo!\n");
     }
     pausar();
 }
@@ -547,16 +547,16 @@ void opcao_carregar_binario() {
         }
         imagem_atual = ler_imagem_binario(arq, offset);
         fclose(arq);
-        printf("✅ Imagem carregada do binário!\n");
+        printf("Imagem carregada do binário!\n");
     } else {
-        printf("❌ Erro ao abrir arquivo!\n");
+        printf("Erro ao abrir arquivo!\n");
     }
     pausar();
 }
 
 void opcao_append_banco() {
     if (imagem_atual == NULL) {
-        printf("❌ Nenhuma imagem carregada!\n");
+        printf("Nenhuma imagem carregada!\n");
         pausar();
         return;
     }
@@ -570,7 +570,7 @@ void opcao_append_banco() {
     scanf("%99s", nome_imagem);
     
     append_image_to_data_file(data_file, imagem_atual, posicao, nome_imagem);
-    printf("✅ Imagem '%s' adicionada ao banco!\n", nome_imagem);
+    printf("Imagem '%s' adicionada ao banco!\n", nome_imagem);
     pausar();
 }
 
@@ -582,12 +582,12 @@ void opcao_restaurar_rle() {
     scanf("%255s", arquivo_saida);
     
     restore_image_from_bin(arquivo_rle, arquivo_saida);
-    printf("✅ Imagem restaurada para '%s'\n", arquivo_saida);
+    printf("Imagem restaurada para '%s'\n", arquivo_saida);
     pausar();
 }
 
 void opcao_reconstruir_bonus() {
-    printf("🚧 FUNCIONALIDADE BONUS - EM DESENVOLVIMENTO\n");
+    printf("FUNCIONALIDADE BONUS - EM DESENVOLVIMENTO\n");
     printf("Esta função criaria a média de múltiplas versões binárias\n");
     printf("de uma mesma imagem para reconstruir a original.\n");
     pausar();
@@ -596,7 +596,7 @@ void opcao_reconstruir_bonus() {
 void opcao_listar_imagens() {
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Arquivo de índices não encontrado!\n");
+        printf("Arquivo de índices não encontrado!\n");
         pausar();
         return;
     }
@@ -637,7 +637,7 @@ void app_call() {
         exibir_menu();
         
         if (scanf("%d", &opcao) != 1) {
-            printf("❌ Entrada inválida! Digite um número.\n");
+            printf("Entrada inválida! Digite um número.\n");
             // Limpar buffer de entrada
             int c;
             while ((c = getchar()) != '\n' && c != EOF);
@@ -671,7 +671,7 @@ void app_call() {
                 opcao_sobre();  // Informações do programa
                 break;
             case 8:
-                printf("🔌 Finalizando sistema...\n");
+                printf("Finalizando sistema...\n");
                 if (imagem_atual != NULL) {
                     free_image(imagem_atual);
                     imagem_atual = NULL;
@@ -679,7 +679,7 @@ void app_call() {
                 printf("Sistema finalizado com sucesso!\n");
                 break;
             default:
-                printf("❌ Opção inválida!\n");
+                printf("Opção inválida!\n");
                 pausar();
         }
     } while(opcao != 8);
@@ -691,21 +691,21 @@ void opcao_calcular_media() {
     printf("      CALCULAR IMAGEM MÉDIA (RESTAURAR)      \n");
     printf("===============================================\n");
     printf("\n");
-    printf("⚠️  AVISO IMPORTANTE:\n");
+    printf("  AVISO IMPORTANTE:\n");
     printf("Esta opção é destinada para um cenário específico onde o\n");
     printf("banco contém APENAS uma mesma imagem original que foi\n");
     printf("limiarizada de diferentes formas.\n");
     printf("\n");
-    printf("📋 FINALIDADE:\n");
+    printf(" FINALIDADE:\n");
     printf("• Restaurar a imagem original baseada na média das versões\n");
     printf("• Útil para recuperar informações perdidas na limiarização\n");
     printf("• Funciona melhor com múltiplas versões da mesma imagem\n");
     printf("\n");
-    printf("🔬 ALGORITMO:\n");
+    printf(" ALGORITMO:\n");
     printf("Calcula a média aritmética pixel por pixel de todas as\n");
     printf("versões limiarizadas: I^R = Σ(I^k) / n\n");
     printf("\n");
-    printf("🎯 CRITÉRIO DE BUSCA:\n");
+    printf(" CRITÉRIO DE BUSCA:\n");
     printf("Busca imagens que contenham o PREFIXO informado + '_RLE_L'\n");
     printf("Exemplo: 'baboon' encontrará:\n");
     printf("  ✓ baboon_RLE_L100, baboon_RLE_L150, baboon_teste_RLE_L200\n");
@@ -717,7 +717,7 @@ void opcao_calcular_media() {
     printf("Digite o PREFIXO do nome da imagem (ex: 'baboon'): ");
     scanf("%99s", nome_base);
     
-    printf("\n🔄 Iniciando processo de restauração...\n");
+    printf("\n Iniciando processo de restauração...\n");
     
     // Calcular imagem média usando função modular
     PGM *img_restaurada = calcular_imagem_media(nome_base, data_file, index_file);
@@ -727,11 +727,11 @@ void opcao_calcular_media() {
         char nome_saida[200];
         snprintf(nome_saida, sizeof(nome_saida), "%s_RESTAURADA.ascii.pgm", nome_base);
         
-        printf("\n💾 Salvando imagem restaurada como: %s\n", nome_saida);
+        printf("\n Salvando imagem restaurada como: %s\n", nome_saida);
         save_pgm(nome_saida, img_restaurada);
         
-        printf("✅ Imagem média salva com sucesso!\n");
-        printf("📊 A imagem restaurada combina informações de todas as versões limiarizadas\n");
+        printf(" Imagem média salva com sucesso!\n");
+        printf(" A imagem restaurada combina informações de todas as versões limiarizadas\n");
         
         // Perguntar se quer salvar no banco também
         char salvar_banco;
@@ -751,14 +751,14 @@ void opcao_calcular_media() {
                 reg.is_removed = 0;
                 adicionar_indice(idx, reg);
                 fclose(idx);
-                printf("✅ Imagem restaurada também salva no banco como: %s\n", reg.name);
+                printf(" Imagem restaurada também salva no banco como: %s\n", reg.name);
             }
         }
         
         free_image(img_restaurada);
     } else {
-        printf("❌ Falha na restauração da imagem.\n");
-        printf("� Verifique se existem versões limiarizadas da imagem '%s' no banco.\n", nome_base);
+        printf(" Falha na restauração da imagem.\n");
+        printf(" Verifique se existem versões limiarizadas da imagem '%s' no banco.\n", nome_base);
     }
     
     printf("\n");

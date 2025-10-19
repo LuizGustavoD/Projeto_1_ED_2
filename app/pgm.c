@@ -148,7 +148,7 @@ void remove_flag_control(FILE *data_file, long offset) {
     // Agora precisamos atualizar o índice, não o arquivo de dados
     FILE *index = fopen("data/indices.bin", "r+b");
     if (!index) {
-        printf("❌ Erro ao abrir arquivo de índices!\n");
+        printf("Erro ao abrir arquivo de índices!\n");
         return;
     }
     
@@ -169,7 +169,7 @@ void remove_flag_control(FILE *data_file, long offset) {
     }
     
     fclose(index);
-    printf("❌ Registro não encontrado no índice!\n");
+    printf("Registro não encontrado no índice!\n");
 }
 
 //Função para restaurar a flag de remoção no índice correspondente
@@ -177,7 +177,7 @@ void restore_flag_control(FILE *data_file, long offset) {
     // Agora precisamos atualizar o índice, não o arquivo de dados
     FILE *index = fopen("data/indices.bin", "r+b");
     if (!index) {
-        printf("❌ Erro ao abrir arquivo de índices!\n");
+        printf("Erro ao abrir arquivo de índices!\n");
         return;
     }
     
@@ -198,7 +198,7 @@ void restore_flag_control(FILE *data_file, long offset) {
     }
     
     fclose(index);
-    printf("❌ Registro não encontrado no índice!\n");
+    printf("Registro não encontrado no índice!\n");
 }
 
 // Função que lê a imagem do binario RLE e restaura a imagem PGM original
@@ -267,18 +267,18 @@ void restore_image_from_bin(const char *bin_file_name, const char *output_pgm_na
 PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const char *index_file) {
     FILE *index = fopen(index_file, "rb");
     if (!index) {
-        printf("❌ Erro ao abrir arquivo de índices!\n");
+        printf("Erro ao abrir arquivo de índices!\n");
         return NULL;
     }
     
     FILE *data = fopen(data_file, "rb");
     if (!data) {
-        printf("❌ Erro ao abrir arquivo de dados!\n");
+        printf("Erro ao abrir arquivo de dados!\n");
         fclose(index);
         return NULL;
     }
     
-    printf("🔍 Buscando versões limiarizadas de '%s'...\n", nome_base);
+    printf("Buscando versões limiarizadas de '%s'...\n", nome_base);
     
     // Arrays para armazenar informações das imagens encontradas
     long offsets[50];
@@ -300,7 +300,7 @@ PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const c
                     limiares[versoes_encontradas] = limiar;
                     versoes_encontradas++;
                     
-                    printf("   ✓ Encontrada: %s (Limiar: %d)\n", reg.name, limiar);
+                    printf("    Encontrada: %s (Limiar: %d)\n", reg.name, limiar);
                     
                     // Ler dimensões da primeira imagem para validação
                     if (versoes_encontradas == 1) {
@@ -315,14 +315,14 @@ PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const c
     }
     
     if (versoes_encontradas == 0) {
-        printf("❌ Nenhuma versão limiarizada encontrada para '%s'\n", nome_base);
+        printf(" Nenhuma versão limiarizada encontrada para '%s'\n", nome_base);
         fclose(index);
         fclose(data);
         return NULL;
     }
     
-    printf("📊 Total de versões encontradas: %d\n", versoes_encontradas);
-    printf("📏 Dimensões: %dx%d\n", width, height);
+    printf(" Total de versões encontradas: %d\n", versoes_encontradas);
+    printf(" Dimensões: %dx%d\n", width, height);
     
     // Alocar matriz para soma dos pixels
     double **soma_pixels = malloc(height * sizeof(double*));
@@ -332,7 +332,7 @@ PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const c
     
     // Processar cada versão encontrada
     for (int v = 0; v < versoes_encontradas; v++) {
-        printf("🔄 Processando versão %d/%d (Limiar: %d)...\n", 
+        printf(" Processando versão %d/%d (Limiar: %d)...\n", 
                v + 1, versoes_encontradas, limiares[v]);
         
         fseek(data, offsets[v], SEEK_SET);
@@ -382,7 +382,7 @@ PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const c
         img_media->pixels[i] = malloc(width * sizeof(unsigned char));
     }
     
-    printf("📊 Calculando média pixel a pixel...\n");
+    printf(" Calculando média pixel a pixel...\n");
     
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -400,8 +400,8 @@ PGM *calcular_imagem_media(const char *nome_base, const char *data_file, const c
     fclose(index);
     fclose(data);
     
-    printf("✅ Imagem média calculada com sucesso!\n");
-    printf("📈 Fórmula aplicada: I^R = Σ(I^k) / n, onde n = %d\n", versoes_encontradas);
+    printf(" Imagem média calculada com sucesso!\n");
+    printf(" Fórmula aplicada: I^R = Σ(I^k) / n, onde n = %d\n", versoes_encontradas);
     
     return img_media;
 }
